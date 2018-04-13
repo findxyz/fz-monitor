@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>http monitor log</title>
+    <header th:replace="header"></header>
+</head>
+<body>
+
+<div class="layui-btn-group">
+    <button class="layui-btn" id="back">返回</button>
+    <button class="layui-btn layui-btn-normal" id="refresh">刷新</button>
+</div>
+
+<table class="layui-table" id="logList" lay-filter="logList"></table>
+
+<footer th:replace="footer"></footer>
+<script type="text/html" id="statusTpl">
+    {{# if (d.status === 'y') { }}
+        <span style="color: green;">正常</span>
+    {{# } else { }}
+        <span style="color: red;">异常</span>
+    {{# } }}
+</script>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    (function () {
+        var $ = layui.jquery;
+        var table = layui.table;
+        var layer = layui.layer;
+
+        var settingId = [[${#httpServletRequest.getAttribute("settingId")}]];
+        table.render({
+            elem: '#logList'
+            , height: 'full-80'
+            , url: '/http/log/list/'
+            , method: 'post'
+            , where: {
+                settingId: settingId
+            }
+            , cellMinWidth: 80
+            , cols: [[
+                {field: 'id', width: 80, title: 'ID'}
+                , {field: 'createTime', width: 200, title: '时间'}
+                , {field: 'status', width: 150, title: '状态', templet: '#statusTpl'}
+                , {field: 'duration', width: 230, title: '耗时（毫秒）'}
+            ]]
+            , page: {
+                limit: 30
+                , layout: ['limit', 'count', 'prev', 'page', 'next', 'skip']
+                , groups: 1
+                , first: false
+                , last: false
+            }
+        });
+
+        $("#back").click(function () {
+            window.location = "/http/main";
+        });
+
+        $("#refresh").click(function () {
+            table.reload("logList", {
+                page: {curr: 1}
+            });
+        });
+    })();
+    /*]]>*/
+</script>
+</body>
+</html>

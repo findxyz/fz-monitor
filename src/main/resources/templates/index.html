@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>首页</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <link th:href="@{/pubs/layui-v2.2.6/layui/css/layui.css}" rel="stylesheet"/>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header layui-bg-black">
+        <div>
+            <a class="layui-logo" href="/">监控管理</a>
+        </div>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;" th:text="${userName}">user xyz</a>
+            </li>
+            <li class="layui-nav-item"><a id="logout" href="javascript:;">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree" lay-filter="monitor">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">监控管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/http/main" target="mainContent">HTTP 监控</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">邮件管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/mail/main" target="mainContent">邮件通知</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">数据管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/h2console" target="mainContent">H2Console</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <iframe src="/home/welcome" frameborder="0" id="mainContent" name="mainContent"
+                style="width: 100%; height: 300px;"></iframe>
+    </div>
+
+    <div class="layui-footer">
+        © f1ndwh7.xyz
+    </div>
+</div>
+
+<footer th:replace="footer"></footer>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    !function () {
+        var $ = layui.$;
+
+        var mainContentResize = function () {
+            var height = $(window).height() - 110;
+            $('#mainContent').height(height);
+        };
+
+        mainContentResize();
+        $(window).on('resize', mainContentResize);
+
+        $("#logout").bind("click", function () {
+            $.post("/doLogout", {}, function (json) {
+                if (json.success) {
+                    window.location = "/";
+                } else {
+                    alert(json.message);
+                }
+            }, 'json');
+        });
+    }();
+    /*]]>*/
+</script>
+</body>
+</html>

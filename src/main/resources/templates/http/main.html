@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>http monitor main</title>
+    <header th:replace="header"></header>
+</head>
+<body>
+
+<div class="layui-btn-group">
+    <button class="layui-btn" id="settingAddBtn">新增监控项</button>
+</div>
+
+<table class="layui-table" id="settingList" lay-filter="settingList"></table>
+
+<script type="text/html" id="toolBar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="log">日志</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<footer th:replace="footer"></footer>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    !function () {
+        var $ = layui.jquery;
+        var table = layui.table;
+        var layer = layui.layer;
+
+        table.render({
+            elem: '#settingList'
+            , url: '/http/setting/list'
+            , cellMinWidth: 80
+            , cols: [[
+                {field: 'id', width: 80, title: 'ID'}
+                , {field: 'name', width: 200, title: '监控名称'}
+                , {field: 'url', width: 350, title: 'URL'}
+                , {field: 'methodType', width: 150, title: '方法类型'}
+                , {field: 'params', width: 300, title: '参数'}
+                , {field: 'time', width: 100, title: '周期（秒）'}
+                , {field: 'wanted', width: 200, title: '期望结果（包含）'}
+                , {fixed: 'right', title: '操作', align: 'center', toolbar: '#toolBar'}
+            ]]
+        });
+
+        table.on('tool(settingList)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'log') {
+                window.location = "/http/log/" + data.id;
+            } else if (obj.event === 'edit') {
+                window.location = "/http/add?id=" + data.id
+            } else if (obj.event === 'del') {
+                layer.confirm('确定删除该监控项目吗？', function (index) {
+                    layer.close(index);
+                    $.post("/http/setting/delete", {id: data.id}, function (json) {
+                        if (json.success) {
+                            table.reload('settingList', {});
+                        } else {
+                            layer.open({time: 5000, content: '<div>' + json.message + '</div>'});
+                        }
+                    }, 'json');
+                });
+            }
+        });
+
+        $("#settingAddBtn").bind("click", function () {
+            window.location = "/http/add";
+        });
+    }();
+    /*]]>*/
+</script>
+</body>
+</html>
