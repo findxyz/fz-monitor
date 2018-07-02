@@ -29,11 +29,11 @@ public class ShiroConfiguration {
         chainDefinition.addPathDefinition("/doLogin", "anon");
         chainDefinition.addPathDefinition("/doLogout", "authc");
         chainDefinition.addPathDefinition("/pubs/**", "anon");
-        chainDefinition.addPathDefinition("/h2console/**", "authc");
+        chainDefinition.addPathDefinition("/h2console/**", "authc, roles[data], perms[data:manage]");
         chainDefinition.addPathDefinition("/", "authc");
         chainDefinition.addPathDefinition("/home/**", "authc");
-        chainDefinition.addPathDefinition("/http/**", "authc");
-        chainDefinition.addPathDefinition("/mail/**", "authc");
+        chainDefinition.addPathDefinition("/http/**", "authc, roles[monitor]");
+        chainDefinition.addPathDefinition("/mail/**", "authc, perms[email]");
         chainDefinition.addPathDefinition("/**", "authc, perms[no]");
         return chainDefinition;
     }

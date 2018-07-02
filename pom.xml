@@ -76,6 +76,12 @@
             <artifactId>h2</artifactId>
             <version>1.4.197</version>
         </dependency>
+        <!-- HikariCP -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>3.1.0</version>
+        </dependency>
         <!-- ok http 3 -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
