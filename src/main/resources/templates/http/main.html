@@ -28,17 +28,18 @@
 
         table.render({
             elem: '#settingList'
+            , width: '1500px'
             , url: '/http/setting/list'
             , cellMinWidth: 80
             , cols: [[
                 {field: 'id', width: 80, title: 'ID'}
-                , {field: 'name', width: 200, title: '监控名称'}
-                , {field: 'url', width: 350, title: 'URL'}
+                , {field: 'name', width: 150, title: '监控名称'}
+                , {field: 'url', width: 300, title: 'URL'}
                 , {field: 'methodType', width: 150, title: '方法类型'}
-                , {field: 'params', width: 300, title: '参数'}
+                , {field: 'params', width: 200, title: '参数'}
                 , {field: 'time', width: 100, title: '周期（秒）'}
                 , {field: 'wanted', width: 200, title: '期望结果（包含）'}
-                , {fixed: 'right', title: '操作', align: 'center', toolbar: '#toolBar'}
+                , {fixed: 'right', width: 280, title: '操作', align: 'center', toolbar: '#toolBar'}
             ]]
         });
 
